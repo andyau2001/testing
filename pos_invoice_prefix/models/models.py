@@ -100,7 +100,7 @@ class CustomPosInvoice(models.Model):
     @api.depends('pos_order_ids.pos_order_prefix')
     def _compute_prefix(self):
         for record in self:
-            record['invoice_prefix'] = record.pos_order_ids.pos_order_prefix
+            record['invoice_prefix'] = record.pos_order_ids.invoice_prefix
 
     @api.model
     def get_all_prefix(self):
