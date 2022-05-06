@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <templates id="pos_order_note_template" inherit_id="point_of_sale.template" xml:space="preserve">
+
+		<t t-name="PosNoteButton" owl="1">
+			<span class="control-button odoo-theme-color" style="background: #875a7b !important;color: white !important;">
+				<i class="fa fa-tag"></i>
+				<span>Note</span>
+			</span>
+		</t>
+
+		<t t-name="Orderline" t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
+			<xpath expr="//ul" position="inside">
+				<t t-if="props.line.get_notes_product_line()">
+					<li class="info orderline-note">
+						<i class="fa fa-tag" role="img" aria-label="Note" title="Note"/>
+						<t t-esc="props.line.get_notes_product_line()" />
+					</li>
+				</t>
+			</xpath>
+		</t>
+
+		<t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+			<xpath expr="//t[@t-else='']" position="after">
+				 <t t-if="line.notes_product_line">
+					<div class="pos-receipt-left-padding">
+						<i class="fa fa-tag" role="img" aria-label="Note" title="Note"/>
+						<t t-esc='line.notes_product_line' />
+					</div>
+				 </t>
+			</xpath>
+		</t>
+
+   </templates>
