@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="product_bundle_sale_order_form_inherit" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//notebook/page/field[@name='order_line']" position="before">
+              <button name="se_product_bundle.action_product_bundle_wizard" string="Add Bundle" type="action"
+                      attrs= "{'invisible':[('state','not in', 'draft')]}" class="btn-primary"/>
+        </xpath>
+        <xpath expr="//field[@name='order_line']/form/field[@name='name']" position="after">
+            <label for="product_bundle_ids"/>
+            <field name="product_bundle_ids"/>
+        </xpath>
+    </field>
+</record>
+
+</odoo>
+
