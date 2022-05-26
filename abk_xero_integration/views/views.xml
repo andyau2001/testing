@@ -1,0 +1,79 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_company_form_inherit_custom">
+            <field name="model">res.company</field>
+            <field name="name">res.company.form.inherit.custom</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='general_info']" position="after">
+                    <page string='ABK Xero Integration' name="abk_xero_integration">
+                        <group>
+                            <field name="is_login_xero" invisible="1"/>
+                            <field name="is_xero_config" invisible="1"/>
+
+                            <button name="abk_xero_config" string="Config Xero" type="object" class="oe_highlight"/>
+                            <button name="abk_xero_login" string="Login to Xero API" type="object"
+                                    class="oe_highlight" attrs="{'invisible': [('is_xero_config', '=', False)]}"/>
+                        </group>
+
+                        <group>
+                            <field name="tenant_id" string="Tenant"
+                                   attrs="{'invisible': ['|',('is_login_xero', '=', False),('is_xero_config', '=', False)]}"/>
+                        </group>
+
+                        <group attrs="{'invisible': ['|','|',('tenant_id', '=', ''),('tenant_id', '=', None),('is_xero_config', '=', False)]}">
+                            <button name="abk_xero_import_contacts" string="Import Contacts" type="object"
+                                    class="oe_highlight"/>
+                        </group>
+
+                        <group attrs="{'invisible': ['|','|',('tenant_id', '=', ''),('tenant_id', '=', None),('is_xero_config', '=', False)]}">
+                            <button name="abk_xero_import_products" string="Import Products" type="object"
+                                    class="oe_highlight"/>
+                        </group>
+
+                        <group attrs="{'invisible': ['|','|',('tenant_id', '=', ''),('tenant_id', '=', None),('is_xero_config', '=', False)]}">
+                            <button name="abk_xero_import_invoices" string="Import Invoices" type="object"
+                                    class="oe_highlight"/>
+                        </group>
+
+                        <group attrs="{'invisible': ['|','|',('tenant_id', '=', ''),('tenant_id', '=', None),('is_xero_config', '=', False)]}">
+                            <button name="abk_xero_push_purchase_orders" string="Sync Purchase Order to Xero"
+                                    type="object"
+                                    class="oe_highlight"/>
+                        </group>
+
+                        <group attrs="{'invisible': ['|','|',('tenant_id', '=', ''),('tenant_id', '=', None),('is_xero_config', '=', False)]}">
+                            <button name="abk_xero_push_invoices" string="Sync Invoice/Bill to Xero"
+                                    type="object"
+                                    class="oe_highlight"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="xero_config_view" model="ir.actions.act_window">
+            <field name="name">xero_config_view</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">abk.xero.session</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <record model="ir.ui.view" id="xero_config_view_form">
+            <field name="model">abk.xero.session</field>
+            <field name="name">xero_config_view.form</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Xero Config">
+                    <sheet>
+                        <group>
+                            <field name="login_url" placeholder="Login URL">Login URL</field>
+                            <field name="client_id" placeholder="Client ID">Client ID</field>
+                            <field name="client_secret" placeholder="Client Secret">Client Secret</field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

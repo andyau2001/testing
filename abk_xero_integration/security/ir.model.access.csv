@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_abk_xero_integration,abk.xero.integration,model_abk_xero_integration,base.group_user,1,1,1,1
+access_abk_xero_session,abk.xero.session,model_abk_xero_session,base.group_user,1,1,1,1
+access_abk_xero_tracking_category,abk.xero.tracking.category,model_abk_xero_tracking_category,base.group_user,1,1,1,1
+access_abk_xero_tracking_category_option,abk.xero.tracking.category.option,model_abk_xero_tracking_category_option,base.group_user,1,1,1,1

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- tracking category-->
+    <record id="view_abk_xero_tracking_category_tree" model="ir.ui.view">
+        <field name="name">view.abk_xero_tracking_category.tree</field>
+        <field name="model">abk.xero.tracking.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ofield"/>
+                <field name="xero_category_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_abk_xero_tracking_category_form" model="ir.ui.view">
+        <field name="name">view.abk.xero.tracking.category.form</field>
+        <field name="model">abk.xero.tracking.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="ofield" required="1"/>
+                    <field name="xero_category_id" required="1"/>
+                </group>
+                <group>
+                    <field name="xero_category_option_ids" context="{'default_category_id': id}">
+                        <tree editable="bottom" string="Xero Category Option IDs">
+                            <field name="ovalue" required="1"/>
+                            <field name="xero_category_option_id" required="1"/>
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_abk_xero_tracking_category" model="ir.actions.act_window">
+        <field name="name">Mapping Xero Category Tracking</field>
+        <field name="res_model">abk.xero.tracking.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_abk_xero_tracking_category" parent="base.menu_users" action="action_abk_xero_tracking_category"
+              sequence="40"/>
+
+    <!-- tracking category option-->
+    <record id="view_abk_xero_tracking_category_option_tree" model="ir.ui.view">
+        <field name="name">view.abk_xero_tracking_category_option.tree</field>
+        <field name="model">abk.xero.tracking.category.option</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="category_id" required="1"/>
+                <field name="ovalue" required="1"/>
+                <field name="xero_category_option_id" required="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_abk_xero_tracking_category_option_form" model="ir.ui.view">
+        <field name="name">view.abk.xero.tracking.category.option.form</field>
+        <field name="model">abk.xero.tracking.category.option</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="category_id" required="1"/>
+                    <field name="ovalue" required="1"/>
+                    <field name="xero_category_option_id" required="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>
