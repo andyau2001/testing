@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <record id="hr_certification_remind_setting" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.hr.certification</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="100"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='hr']/div[1]" position="after">
+                    <h2>Employee Certification Remind</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box" title="">
+
+                            <div class="o_setting_right_pane">
+                                <label for="cert_expired_em_id"/>
+                                <div class="text-muted">
+                                    Email Template To Remind Employee Certificate Expired
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="cert_expired_em_id"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="cert_expired_days"/>
+                                <div class="text-muted">
+                                    Use , to separate for multiple days
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="cert_expired_days"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
