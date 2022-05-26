@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="export_ir56e_form" model="ir.actions.server">
+            <field name="name">Export IR56E Form PDF</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="binding_model_id" ref="hr.model_hr_employee"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = records.action_export_ir56e()
+            </field>
+        </record>
+
+        <record id="export_ir56e_form_html" model="ir.actions.server">
+            <field name="name">Export IR56E Form</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="binding_model_id" ref="hr.model_hr_employee"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = records.action_export_ir56e(html=True)
+            </field>
+        </record>
+
+<!--        <record id="action_export_ir56e_form" model="ir.actions.report">-->
+<!--            <field name="name">Export IR56E Form Report</field>-->
+<!--            <field name="model">hr.employee</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">abk_custom.report_export_ir56e_form</field>-->
+<!--            <field name="report_file">abk_custom.report_export_ir56e_form</field>-->
+<!--            <field name="print_report_name">'Export IR56E Form Report - %s' % (object.name)</field>-->
+<!--            <field name="binding_model_id" ref="hr.model_hr_employee"/>-->
+<!--        </record>-->
+    </data>
+</odoo>

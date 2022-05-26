@@ -1,0 +1,244 @@
+<odoo>
+    <data>
+<!--        <record id="seq_number" model="ir.sequence">-->
+<!--            <field name="name">MR Number</field>-->
+<!--            <field name="code">abk.material.requisitions</field>-->
+<!--            <field name="prefix">PR%(y)s-</field>-->
+<!--            <field name="padding">4</field>-->
+<!--            <field name="number_next">5000</field>-->
+<!--            <field name="number_increment">1</field>-->
+<!--        </record>-->
+
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="abk_material_requisitions.list">
+            <field name="name">Material Requisitions</field>
+            <field name="model">abk.material.requisitions</field>
+            <field name="arch" type="xml">
+                <tree string="Material Requisitions" decoration-muted="state=='cancel'" sample="1">
+                    <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                    <field name="name" readonly="1" decoration-info="state in ('draft','submitted')"/>
+                    <field name="partner_id" readonly="1"/>
+                    <field name="project_code"/>
+<!--                    <field name="order_id"/>-->
+                    <field name="date_order"
+                           attrs="{'invisible': ['|', ('state', '=', 'approved'), ('state', '=', 'cancel')]}"
+                           widget="remaining_days" optional="show"/>
+                    <field name="origin" optional="show"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary"
+                           optional="hide"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" optional="show"
+                           decoration-bf="state in ['purchase', 'done']"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" optional="show" widget="badge" decoration-success="state == 'approved'"
+                           decoration-warning="state == 'submitted'" decoration-info="state == 'draft'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        Form View-->
+        <record id="material_requisitions_form_view" model="ir.ui.view">
+            <field name="name">Material Requisitions Form</field>
+            <field name="model">abk.material.requisitions</field>
+            <field name="arch" type="xml">
+                <form string="Material Requisitions" class="o_purchase_order">
+                    <header>
+                        <!--                        <button name="button_approve" type="object" states='to approve' string="Approve Order"-->
+                        <!--                                class="oe_highlight" groups="purchase.group_purchase_manager" data-hotkey="z"/>-->
+                        <button name="button_submitted" type="object" states="draft" string="Submit"
+                                id="draft_submitted"/>
+                        <button name="button_approved" type="object" states="submitted" string="Approve"
+                                id="button_approved"/>
+                        <button name="button_draft" states="cancel" string="Set to Draft" type="object"
+                                data-hotkey="o"/>
+                        <button name="button_cancel" states="draft,submitted,approved" string="Cancel" type="object"
+                                data-hotkey="x"/>
+                        <!--                        <button name="confirm_reminder_mail" string="Confirm Receipt Date" type="object"-->
+                        <!--                                attrs="{'invisible': ['|','|', ('state', 'not in', ('purchase', 'done')), ('mail_reminder_confirmed', '=', True), ('date_planned', '=', False)]}"-->
+                        <!--                                groups="base.group_no_one" data-hotkey="o"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved"
+                               readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <span class="o_form_label">Auto PR Number</span>
+                            <h1>
+                                <field name="priority" widget="priority" class="mr-3"/>
+                                <field name="name" readonly="1" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" widget="res_partner_many2one"
+                                       context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                                       options='{"always_reload": True}'/>
+                                <field name="partner_invoice_id"
+                                       groups="abk_material_requisitions.group_delivery_invoice_address"
+                                       context="{'default_type':'invoice'}" options='{"always_reload": True}'/>
+                                <field name="partner_shipping_id"
+                                       groups="abk_material_requisitions.group_delivery_invoice_address"
+                                       context="{'default_type':'delivery'}" options='{"always_reload": True}'/>
+                                <field name="contact_phone" attrs="{'invisible': [('partner_id', '=', False)]}"/>
+<!--                                <field name="order_id"/>-->
+                                <field name="project_code"/>
+                                 <field name="attn" string="Attn" />
+                                <field name="MP" string="MP" />
+                                <field name="Q" string="Q"/>
+                                <field name="CM" string="CM"/>
+                            </group>
+                            <group>
+                                <field name="revision"/>
+                                <field name="date_order"/>
+                                <!--                                <label for="date_approve"-->
+                                <!--                                       attrs="{'invisible': [('state','not in',('draft','submitted'))]}"/>-->
+                                <!--                                <div name="date_approve"-->
+                                <!--                                     attrs="{'invisible': [('state','not in',('draft','submitted'))]}"-->
+                                <!--                                     class="o_row">-->
+                                <!--                                    <field name="date_approve"/>-->
+                                <!--                                    <field name="mail_reception_confirmed" invisible="1"/>-->
+                                <!--                                    <span class="text-muted"-->
+                                <!--                                          attrs="{'invisible': [('mail_reception_confirmed','=', False)]}">(confirmed by-->
+                                <!--                                        vendor)-->
+                                <!--                                    </span>-->
+                                <!--                                </div>-->
+                                <field name="receipt_date"/>
+                                <label for="receipt_reminder_email" invisible='1'/>
+                                <div name="reminder" class="o_row">
+                                    <field name="receipt_reminder_email"/>
+                                    <span>Ask confirmation</span>
+                                    <div class="o_row oe_inline"
+                                         attrs="{'invisible': [('receipt_reminder_email', '=', False)]}">
+                                        <field name="reminder_date_before_receipt" class="oe_inline"/>
+                                        day(s) before
+                                        <!--                                        <widget name='toaster_button' button_name="send_reminder_preview" title="Preview the reminder email by sending it to yourself." attrs="{'invisible': [('id', '=', False)]}"/>-->
+                                    </div>
+                                </div>
+                                <field name="self_collection"/>
+<!--                                <field name="sale_note" nolabel="1"-->
+<!--                                       attrs="{'invisible': [('terms_conditions', '=', False)]}"/>-->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Products" name="products">
+                                <field name="mr_line"
+                                       widget="section_and_note_one2many"
+                                       mode="tree"
+                                       context="{'default_state': 'draft'}"
+                                       attrs="{'readonly': [('state', 'in', ('approved', 'cancel'))]}">
+                                    <tree string="Material Requisitions Lines" editable="bottom">
+                                        <control>
+                                            <create name="add_product_control" string="Add a product"/>
+                                            <create name="add_section_control" string="Add a section"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                                            <create name="add_note_control" string="Add a note"
+                                                    context="{'default_display_type': 'line_note'}"/>
+                                        </control>
+                                        <field name="state" invisible="1"/>
+                                        <field name="display_type" invisible="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="product_type" invisible="1"/>
+                                        <field name="product_uom_category_id" invisible="1"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="product_id" attrs="{
+                                            'readonly': [('state', 'in', ('approved', 'cancel'))],
+                                            'required': [('display_type', '=', False)],
+                                        }" force_save="1"/>
+                                        <field name="name" widget="section_and_note_text"/>
+                                        <field name="date_planned" optional="hide"
+                                               attrs="{'required': [('display_type', '=', False)]}" force_save="1"/>
+                                        <field name="product_qty"/>
+                                        <field name="product_uom" string="UoM" groups="uom.group_uom"
+                                               attrs="{
+                                            'readonly': [('state', 'in', ('approved', 'cancel'))],
+                                            'required': [('display_type', '=', False)]
+                                        }"
+                                               force_save="1" optional="show"/>
+                                        <field name="price_unit"/>
+                                        <field name="taxes_id" widget="many2many_tags"
+                                               domain="[('type_tax_use','=','purchase')]"
+                                               context="{'search_view_ref': 'account.account_tax_view_search'}"
+                                               options="{'no_create': True}" optional="show"/>
+                                        <field name="price_subtotal" widget="monetary"/>
+                                    </tree>
+                                    <form string="Material Requisitions Lines">
+                                        <field name="state" invisible="1"/>
+                                        <field name="display_type" invisible="1"/>
+                                        <group attrs="{'invisible': [('display_type', '!=', False)]}">
+                                            <group>
+                                                <field name="product_uom_category_id" invisible="1"/>
+                                                <field name="product_id"
+                                                       widget="many2one_barcode"/>
+                                                <label for="product_qty"/>
+                                                <div class="o_row">
+                                                    <field name="product_qty"/>
+                                                    <field name="product_uom" groups="uom.group_uom"
+                                                           attrs="{'required': [('display_type', '=', False)]}"/>
+                                                </div>
+                                                <field name="price_unit"/>
+                                                <field name="taxes_id" widget="many2many_tags"
+                                                       options="{'no_create': True}"/>
+                                            </group>
+                                            <group>
+                                                <field name="date_planned" widget="date"
+                                                       attrs="{'required': [('display_type', '=', False)]}"/>
+                                            </group>
+                                            <group colspan="12">
+                                            </group>
+                                        </group>
+                                        <label for="name" string="Section Name (eg. Products, Services)"
+                                               attrs="{'invisible': [('display_type', '!=', 'line_section')]}"/>
+                                        <label for="name" string="Note"
+                                               attrs="{'invisible': [('display_type', '!=', 'line_note')]}"/>
+                                        <field name="name" nolabel="1"
+                                               attrs="{'invisible': [('display_type', '=', False)]}"/>
+                                    </form>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_untaxed" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_tax" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline">
+                                        <label for="amount_total"/>
+                                    </div>
+                                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator"
+                                           widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <field name="notes" class="oe_inline"
+                                       placeholder="Define your terms and conditions ..."/>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Other Information" name="material_requisition_information">
+                                <group>
+                                    <group name="other_info">
+                                        <field name="user_id" domain="[('share', '=', False)]"
+                                               widget="many2one_avatar_user"/>
+                                        <field name="company_id" groups="base.group_multi_company"
+                                               options="{'no_create': True}"/>
+                                        <field name="origin"/>
+                                    </group>
+                                    <group name="invoice_info">
+                                        <!--                                    <field name="invoice_status" attrs="{'invisible': [('state', 'in', ('draft', 'sent', 'to approve', 'cancel'))]}"/>-->
+                                        <!--                                    <field name="payment_term_id" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}" options="{'no_create': True}"/>-->
+                                        <!--                                    <field name="fiscal_position_id" options="{'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}"/>-->
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="action_material_requisitions">
+            <field name="name">Material Requisitions</field>
+            <field name="res_model">abk.material.requisitions</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="purchase_abk_material_requisition" parent="purchase.menu_purchase_root"
+                  name="Material Requisitions"
+                  action="action_material_requisitions" sequence="0"/>
+    </data>
+</odoo>

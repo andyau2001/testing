@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record id="terms_conditions_tree_view" model="ir.ui.view">
+            <field name="name">Terms and Conditions list</field>
+            <field name="model">abk.terms.conditions</field>
+            <field name="arch" type="xml">
+                <tree multi_edit="1">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+        <!--Form View-->
+        <record id="terms_conditions_form_view" model="ir.ui.view">
+            <field name="name">Terms and Conditions form</field>
+            <field name="model">abk.terms.conditions</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" placeholder="e.g. Term"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record id="action_abk_terms_conditions" model="ir.actions.act_window">
+            <field name="name">Terms and Conditions</field>
+            <field name="res_model">abk.terms.conditions</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_purchase_abk_terms_conditions" parent="purchase.menu_purchase_config"
+                  name="Terms &amp; Conditions"
+                  action="action_abk_terms_conditions" sequence="1"/>
+    </data>
+</odoo>

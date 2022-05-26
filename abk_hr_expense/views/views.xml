@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.abk.hr.expense</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="86"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='hr_expense']/div[1]" position="after">
+<!--                <xpath expr="//div[hasclass('settings')]" position="inside">-->
+<!--                    <div class="app_settings_block" data-string="Expenses Auto" string="Expenses Auto"-->
+<!--                         data-key="abk_hr_expense" groups="hr_expense.group_hr_expense_manager">-->
+                        <h2>Expense Auto</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box" title="">
+                                <div class="o_setting_right_pane">
+                                    <label for="expense_amount_over"/>
+                                    <div class="text-muted">
+                                        Expense is over limit
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="expense_amount_over"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_setting_right_pane">
+                                    <label for="expense_date_over"/>
+                                    <div class="text-muted">
+                                        Expense is past due
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="expense_date_over"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_setting_right_pane">
+                                    <label for="expense_reject_status"/>
+                                    <div class="text-muted">
+                                        Expense has exceeded limites
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="expense_reject_status"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<!--                    </div>-->
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

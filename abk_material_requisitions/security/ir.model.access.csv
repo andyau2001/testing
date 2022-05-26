@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_abk_material_requisitions,abk.material.requisitions,model_abk_material_requisitions,base.group_user,1,1,1,1
+access_abk_material_requisitions_line,abk.material.requisitions.line,model_abk_material_requisitions_line,base.group_user,1,1,1,1
+access_abk_terms_conditions,abk.terms.conditions,model_abk_terms_conditions,base.group_user,1,1,1,1
