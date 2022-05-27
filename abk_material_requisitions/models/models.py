@@ -31,7 +31,15 @@ class ResConfigSettings(models.TransientModel):
 
 class CustomPurchaseOrder(models.Model):
     _inherit = 'purchase.order'
-
+    state = fields.Selection([
+        ('draft2', 'Waiting For First Approval'),
+        ('draft', 'Waiting For Final Approval'),
+        ('sent', 'RFQ Sent'),
+        ('to approve', 'To Approve'),
+        ('purchase', 'Purchase Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled')
+    ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
     terms_conditions = fields.Many2one('abk.terms.conditions', string='Terms & Conditions')
     term_description = fields.Text(related='terms_conditions.description', string='Term Description')
 
@@ -39,6 +47,20 @@ class CustomPurchaseOrder(models.Model):
     def _onchange_terms_conditions(self):
         for record in self:
             record['notes'] = record.term_description
+
+    def button_abk_change_state(self):
+        for order in self:
+            if order.state not in ['draft2']:
+                continue
+            order.write({'state': 'draft'})
+        return True
+
+    def button_draft(self):
+        if self.x_studio_department.name == 'Team E' or self.x_studio_department.name == 'Team D':
+            self.write({'state': 'draft2'})
+        else:
+            self.write({'state': 'draft'})
+        return {}
 
 
 class MaterialRequisitions(models.Model):
